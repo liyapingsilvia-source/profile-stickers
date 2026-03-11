@@ -1,0 +1,7 @@
+{
+  "name": "电商账号的背景",
+  "description": "A high-fidelity, interactive clone of a Lemon8-style social media profile page with a post grid and navigation.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
