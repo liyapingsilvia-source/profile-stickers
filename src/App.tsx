@@ -12,7 +12,9 @@ import { BottomNavBar } from './components/profile/BottomNavBar';
 import { SettingsModal } from './components/SettingsModal';
 import { BackgroundEditor } from './components/profile/BackgroundEditor';
 import { GravityStickers } from './components/profile/GravityStickers';
+import { ProfileSwitcherSheet } from './components/profile/ProfileSwitcherSheet';
 import { extractDominantColor } from './services/colorService';
+import { profiles } from './data/profiles';
 
 // --- Types ---
 interface Post {
@@ -25,18 +27,44 @@ interface Post {
 }
 
 export default function App() {
+  const [activeProfileId, setActiveProfileId] = useState<string>('rhode');
+  const activeProfile = profiles[activeProfileId];
+
   const [showSettings, setShowSettings] = useState(false);
   const [showBackgroundEditor, setShowBackgroundEditor] = useState(false);
+  const [showProfileSwitcher, setShowProfileSwitcher] = useState(false);
   const [profileBackground, setProfileBackground] = useState<string | null>(null);
-  const [backgroundColor, setBackgroundColor] = useState<string>('#361D1E');
+  const [backgroundColor, setBackgroundColor] = useState<string>(activeProfile.theme.backgroundColor);
   const [scale, setScale] = useState(1);
+
+  // Update background color when profile changes
+  useEffect(() => {
+    if (!profileBackground) {
+      setBackgroundColor(activeProfile.theme.backgroundColor);
+    }
+  }, [activeProfileId, activeProfile.theme.backgroundColor, profileBackground]);
+
+  // Determine if text should be light (white) based on background color brightness
+  const isLightText = (() => {
+    if (profileBackground) return true; // Assume image backgrounds need light text for now
+    const hex = backgroundColor.replace('#', '');
+    if (hex.length !== 6) return true;
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return brightness < 155;
+  })();
 
   useEffect(() => {
     const handleResize = () => {
       const viewportHeight = window.innerHeight;
       const viewportWidth = window.innerWidth;
-      const targetHeight = 844 + 40; // 844px + some margin
-      const targetWidth = 390 + 40;
+      
+      // On smaller screens (like mobile), don't force a margin so it can fill the screen better
+      const isMobile = viewportWidth < 600;
+      const targetHeight = isMobile ? 844 : 844 + 40;
+      const targetWidth = isMobile ? 390 : 390 + 40;
       
       const scaleH = viewportHeight / targetHeight;
       const scaleW = viewportWidth / targetWidth;
@@ -69,7 +97,7 @@ export default function App() {
   // ... rest of the component
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#f0f0f0] overflow-hidden">
+    <div className="grid min-h-[100dvh] w-full place-items-center bg-[#f0f0f0] overflow-hidden relative">
       {/* iPhone frame - 390x844 from Figma */}
       <div
         className="relative flex flex-col overflow-hidden bg-white shadow-2xl origin-center transition-transform duration-300"
@@ -121,15 +149,15 @@ export default function App() {
           <div className="relative z-10 flex flex-col flex-1">
             {/* Gravity Stickers - Fixed background layer for physics, z-20 */}
             <div className="absolute top-0 left-0 right-0 z-20 pointer-events-auto" style={{ height: 235 }}>
-              <GravityStickers />
+              <GravityStickers stickers={activeProfile.stickers} />
             </div>
 
             {/* Status Bar + Nav Bar group - Fixed at top, z-30 */}
             <div className="absolute top-0 left-0 right-0 z-30 flex flex-col pointer-events-none">
-              <StatusBar lightMode={!profileBackground ? true : !!profileBackground} />
+              <StatusBar lightMode={isLightText} />
               <NavBar 
                 onOpenSettings={() => setShowSettings(true)} 
-                lightMode={!profileBackground ? true : !!profileBackground}
+                lightMode={isLightText}
               />
             </div>
 
@@ -157,11 +185,14 @@ export default function App() {
                       className="cursor-pointer"
                       onClick={() => setShowBackgroundEditor(true)}
                     >
-                      <ProfileHeader />
+                      <ProfileHeader 
+                        profile={activeProfile} 
+                        onSwitchProfile={() => setShowProfileSwitcher(true)}
+                      />
                     </div>
 
                     {/* Bio & Links */}
-                    <BioLinks />
+                    <BioLinks profile={activeProfile} />
 
                     {/* Content section */}
                     <motion.div 
@@ -176,7 +207,7 @@ export default function App() {
                       <IconTabBar />
 
                       {/* Video post grid */}
-                      <VideoGrid />
+                      <VideoGrid posts={activeProfile.posts} />
                     </motion.div>
                   </div>
                 </div>
@@ -188,6 +219,17 @@ export default function App() {
           <div className="relative z-50 pointer-events-auto">
             <BottomNavBar />
           </div>
+
+          {/* Profile Switcher Action Sheet */}
+          <ProfileSwitcherSheet 
+            isOpen={showProfileSwitcher}
+            onClose={() => setShowProfileSwitcher(false)}
+            activeProfileId={activeProfileId}
+            onSelect={(id) => {
+              setActiveProfileId(id);
+              setProfileBackground(null);
+            }}
+          />
         </div>
       </div>
     </div>

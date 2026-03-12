@@ -1,26 +1,23 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import Matter from 'matter-js';
 
-const BASE_STICKERS = [
-  "https://picui.ogmua.cn/s1/2026/03/11/69b127096d353.webp",
-  "https://picui.ogmua.cn/s1/2026/03/11/69b12709b9c44.webp",
-  "https://picui.ogmua.cn/s1/2026/03/11/69b1270a4b2ea.webp",
-  "https://picui.ogmua.cn/s1/2026/03/11/69b1270abc683.webp",
-  "https://picui.ogmua.cn/s1/2026/03/11/69b1270b0247d.webp",
-  "https://picui.ogmua.cn/s1/2026/03/11/69b1271498039.webp",
-  "https://picui.ogmua.cn/s1/2026/03/11/69b12714be5b1.webp"
-];
+interface GravityStickersProps {
+  stickers: string[];
+}
 
-// Duplicate stickers to increase the quantity (20 stickers total)
-const STICKERS = [
-  ...BASE_STICKERS,
-  ...BASE_STICKERS,
-  ...BASE_STICKERS.slice(0, 6)
-].sort(() => Math.random() - 0.5);
-
-export function GravityStickers() {
+export function GravityStickers({ stickers }: GravityStickersProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
+
+  // Duplicate stickers to increase the quantity (20 stickers total)
+  const displayStickers = useMemo(() => {
+    if (!stickers || stickers.length === 0) return [];
+    const result = [];
+    for (let i = 0; i < 20; i++) {
+      result.push(stickers[i % stickers.length]);
+    }
+    return result.sort(() => Math.random() - 0.5);
+  }, [stickers]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -47,8 +44,8 @@ export function GravityStickers() {
     Composite.add(engine.world, [ground, leftWall, rightWall]);
 
     // Create sticker bodies
-    const newBodies = STICKERS.map((_, index) => {
-      const size = 130 + Math.random() * 50; // 130 to 180 (Bigger sizes)
+    const newBodies = displayStickers.map((_, index) => {
+      const size = 180 + Math.random() * 70; // 180 to 250 (Bigger sizes)
       const x = Math.random() * (width - size) + size / 2;
       const y = -Math.random() * 500 - 200; // Start above
 
@@ -56,13 +53,25 @@ export function GravityStickers() {
       // This allows the transparent edges of the images to overlap
       const collisionRadius = size * 0.22; 
 
-      return Bodies.circle(x, y, collisionRadius, {
+      const body = Bodies.circle(x, y, collisionRadius, {
         restitution: 0.4, // Less bouncy so they settle nicely
         friction: 0.5,    // More friction to stick together
         frictionAir: 0.02,
         density: 0.05,
+        angle: Math.random() * Math.PI * 2, // Random initial rotation
         plugin: { size }
       });
+
+      // Apply random initial velocity so they don't fall straight down
+      Matter.Body.setVelocity(body, {
+        x: (Math.random() - 0.5) * 15, // Random horizontal velocity
+        y: Math.random() * 5 // Slight downward push
+      });
+      
+      // Apply random angular velocity so they spin while falling
+      Matter.Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.3);
+
+      return body;
     });
 
     Composite.add(engine.world, newBodies);
@@ -143,7 +152,7 @@ export function GravityStickers() {
       Runner.stop(runner);
       Engine.clear(engine);
     };
-  }, []);
+  }, [displayStickers]);
 
   return (
     <div 
@@ -151,7 +160,7 @@ export function GravityStickers() {
       className="absolute top-0 left-0 w-full overflow-visible"
       style={{ height: 235, zIndex: 5 }}
     >
-      {STICKERS.map((url, index) => (
+      {displayStickers.map((url, index) => (
         <img
           key={index}
           ref={el => imagesRef.current[index] = el}

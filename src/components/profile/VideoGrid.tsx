@@ -1,23 +1,5 @@
 import { Play } from "lucide-react"
-
-interface VideoItem {
-  src: string
-  views: string
-  badge?: string
-  badgeColor?: string
-}
-
-const row1: VideoItem[] = [
-  { src: "https://picui.ogmua.cn/s1/2026/03/11/69b12e7e8950e.webp", views: "16.5K", badge: "Pinned", badgeColor: "rgba(254,44,85,1)" },
-  { src: "https://picui.ogmua.cn/s1/2026/03/11/69b12e7f7e290.webp", views: "16.5K", badge: "Pinned", badgeColor: "rgba(254,44,85,1)" },
-  { src: "https://picui.ogmua.cn/s1/2026/03/11/69b12e7fca2bf.webp", views: "16.5K" },
-]
-
-const row2: VideoItem[] = [
-  { src: "https://picui.ogmua.cn/s1/2026/03/11/69b12e8002987.webp", views: "1,202" },
-  { src: "https://picui.ogmua.cn/s1/2026/03/11/69b12e804fc17.webp", views: "712" },
-  { src: "https://picui.ogmua.cn/s1/2026/03/11/69b12e878be4f.webp", views: "10.1K" },
-]
+import { VideoItem } from "../../data/profiles"
 
 function VideoThumbnail({ item }: { item: VideoItem; key?: any }) {
   const isDraftBadge = item.badge && item.badgeColor === "rgba(245,245,245,1)"
@@ -105,16 +87,21 @@ function VideoRow({ items }: { items: VideoItem[] }) {
   )
 }
 
-export const profilePosts: VideoItem[] = [...row1, ...row2];
+export function VideoGrid({ posts }: { posts: VideoItem[] }) {
+  // Chunk posts into arrays of 3
+  const rows = [];
+  for (let i = 0; i < posts.length; i += 3) {
+    rows.push(posts.slice(i, i + 3));
+  }
 
-export function VideoGrid() {
   return (
     <div
       className="flex flex-col bg-white"
       style={{ width: '100%', gap: 1.5 }}
     >
-      <VideoRow items={row1} />
-      <VideoRow items={row2} />
+      {rows.map((row, i) => (
+        <VideoRow key={i} items={row} />
+      ))}
     </div>
   )
 }
