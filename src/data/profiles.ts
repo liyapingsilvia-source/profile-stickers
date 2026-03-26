@@ -32,35 +32,34 @@ export interface ProfileData {
 }
 
 const defaultPosts = [
-  { src: "https://picui.ogmua.cn/s1/2026/03/11/69b12e7e8950e.webp", views: "16.5K", badge: "Pinned", badgeColor: "rgba(254,44,85,1)" },
-  { src: "https://picui.ogmua.cn/s1/2026/03/11/69b12e7f7e290.webp", views: "16.5K", badge: "Pinned", badgeColor: "rgba(254,44,85,1)" },
-  { src: "https://picui.ogmua.cn/s1/2026/03/11/69b12e7fca2bf.webp", views: "16.5K" },
+  { src: "https://picui.ogmua.cn/s1/2026/03/26/69c4e1b6d16f2.webp", views: "16.5K", badge: "Pinned", badgeColor: "rgba(254,44,85,1)" },
+  { src: "https://picui.ogmua.cn/s1/2026/03/26/69c4e1b6d8a2e.webp", views: "16.5K", badge: "Pinned", badgeColor: "rgba(254,44,85,1)" },
+  { src: "https://picui.ogmua.cn/s1/2026/03/26/69c4e1b709fd3.webp", views: "16.5K" },
   { src: "https://picui.ogmua.cn/s1/2026/03/11/69b12e8002987.webp", views: "1,202" },
-  { src: "https://picui.ogmua.cn/s1/2026/03/11/69b12e804fc17.webp", views: "712" },
-  { src: "https://picui.ogmua.cn/s1/2026/03/11/69b12e878be4f.webp", views: "10.1K" },
+  { src: "https://picui.ogmua.cn/s1/2026/03/26/69c4e1b724966.webp", views: "712" },
+  { src: "https://picui.ogmua.cn/s1/2026/03/26/69c4e1bf6ce10.webp", views: "10.1K" },
 ];
 
 const jellycatPosts = [
-  { src: "https://picui.ogmua.cn/s1/2026/03/12/69b239319bed7.webp", views: "16.5K", badge: "Pinned", badgeColor: "rgba(254,44,85,1)" },
-  { src: "https://picui.ogmua.cn/s1/2026/03/12/69b2394902ad7.webp", views: "16.5K", badge: "Pinned", badgeColor: "rgba(254,44,85,1)" },
-  { src: "https://picui.ogmua.cn/s1/2026/03/12/69b2396303e7d.webp", views: "16.5K" },
-  { src: "https://picui.ogmua.cn/s1/2026/03/12/69b23965e0cbd.webp", views: "1,202" },
-  { src: "https://picui.ogmua.cn/s1/2026/03/12/69b23978e1acd.webp", views: "712" },
-  { src: "https://picui.ogmua.cn/s1/2026/03/12/69b2397aafc28.webp", views: "10.1K" },
+  { src: "https://picui.ogmua.cn/s1/2026/03/26/69c4e33882d6c.webp", views: "16.5K", badge: "Pinned", badgeColor: "rgba(254,44,85,1)" },
+  { src: "https://picui.ogmua.cn/s1/2026/03/26/69c4e340485e3.webp", views: "16.5K", badge: "Pinned", badgeColor: "rgba(254,44,85,1)" },
+  { src: "https://picui.ogmua.cn/s1/2026/03/26/69c4e342e5cbb.webp", views: "16.5K" },
+  { src: "https://picui.ogmua.cn/s1/2026/03/26/69c4e3460b836.webp", views: "1,202" },
+  { src: "https://picui.ogmua.cn/s1/2026/03/26/69c4e346dc243.webp", views: "712" },
+  { src: "https://picui.ogmua.cn/s1/2026/03/26/69c4e34cc1463.webp", views: "10.1K" },
 ];
 
 const rhodeStickers = [
-  "https://picui.ogmua.cn/s1/2026/03/11/69b127096d353.webp",
-  "https://picui.ogmua.cn/s1/2026/03/11/69b12709b9c44.webp",
-  "https://picui.ogmua.cn/s1/2026/03/11/69b1270a4b2ea.webp",
-  "https://picui.ogmua.cn/s1/2026/03/11/69b1270abc683.webp",
-  "https://picui.ogmua.cn/s1/2026/03/11/69b1270b0247d.webp",
-  "https://picui.ogmua.cn/s1/2026/03/11/69b1271498039.webp",
-  "https://picui.ogmua.cn/s1/2026/03/11/69b12714be5b1.webp"
+  "https://picui.ogmua.cn/s1/2026/03/26/69c4e27fe50da.webp",
+  "https://picui.ogmua.cn/s1/2026/03/26/69c4e280191f0.webp",
+  "https://picui.ogmua.cn/s1/2026/03/26/69c4e27fc1cd6.webp",
+  "https://picui.ogmua.cn/s1/2026/03/26/69c4e2805ea7b.webp",
+  "https://picui.ogmua.cn/s1/2026/03/26/69c4e28087c36.webp",
+  "https://picui.ogmua.cn/s1/2026/03/26/69c4e289aca86.webp"
 ];
 
 const jellycatStickers = [
-  "https://picui.ogmua.cn/s1/2026/03/12/69b26e2e09033.webp"
+  "https://picui.ogmua.cn/s1/2026/03/26/69c52793432d3.webp"
 ];
 
 export const profiles: Record<string, ProfileData> = {
@@ -100,7 +99,7 @@ export const profiles: Record<string, ProfileData> = {
     avatar: {
       bgColor: '#D8323C',
       text: 'JC',
-      imageUrl: 'https://picui.ogmua.cn/s1/2026/03/12/69b23772b0984.webp',
+      imageUrl: 'https://picui.ogmua.cn/s1/2026/03/26/69c526ba1e477.webp',
     },
     bio: {
       text: 'The official Jellycat Instagram 💙\nFollow for fun and updates #Sharingjoy',
